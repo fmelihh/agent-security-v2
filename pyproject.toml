@@ -1,0 +1,30 @@
+[project]
+name = "prompt-injection-lab-v2"
+version = "0.2.0"
+description = "Prompt injection lab v2: the v1 harness plus a quarantine model and a tool executor."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "langchain-openai>=0.2.0",
+    "langchain-core>=0.3.0",
+    "python-dotenv>=1.0.0",
+    "langserve>=0.3.0",
+    "fastapi>=0.141.1",
+    "uvicorn>=0.30.0",
+    "langgraph>=1.2.11",
+    "langgraph-cli[inmem]>=0.2.0",
+    "langchain>=1.4.0",
+    "httpx>=0.27.0",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.0"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+markers = ["model: needs the local qwen model in Docker Model Runner (make model)"]
+addopts = "-m 'not model'"
+
+[tool.uv]
+package = false
