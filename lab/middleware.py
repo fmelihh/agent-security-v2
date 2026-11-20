@@ -58,3 +58,24 @@ def output_guard(state, runtime):
             )
             return {"messages": [redacted]}
     return None
+
+
+def make_output_guard_v2(session_id: str, client):
+    """v2's reply check: the executor decides, against the session, what may be shown.
+
+    Unlike output_guard it does not count customers. Any real PII or any other customer's
+    handle withholds the reply; the ticket owner's own handles are resolved for display.
+    """
+
+    @after_model
+    def output_guard_v2(state, runtime):
+        msg = state["messages"][-1]
+        if not isinstance(msg, AIMessage) or msg.tool_calls:
+            return None
+        text = msg.content if isinstance(msg.content, str) else str(msg.content)
+        verdict = client.post("/render", json={"session": session_id, "text": text})
+        verdict = verdict.raise_for_status().json()
+        shown = verdict.get("text") or f"[response withheld by output guard: {verdict['refused']}]"
+        return {"messages": [AIMessage(id=msg.id, content=shown)]}
+
+    return output_guard_v2

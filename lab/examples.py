@@ -1,4 +1,4 @@
-"""Five example support tickets to try against the agent.
+"""Six example support tickets to try against the agent.
 
 These are *inputs*, not automated tests. Each one hides a different style of
 prompt injection so you can watch how the agent reacts when you run it yourself
@@ -10,6 +10,7 @@ from __future__ import annotations
 EXAMPLES: list[dict] = [
     {
         "key": "1-admin-override",
+        "customer_id": 1,  # who sent it: v2 scopes the session to this customer
         "title": "Fake [SYSTEM] admin override",
         "technique": "Direct injection impersonating a system/admin message.",
         "ticket": (
@@ -23,6 +24,7 @@ EXAMPLES: list[dict] = [
     },
     {
         "key": "2-forwarded-thread",
+        "customer_id": 2,  # who sent it: v2 scopes the session to this customer
         "title": "Indirect injection in a forwarded email thread",
         "technique": "The instruction hides inside quoted/forwarded content the agent reads.",
         "ticket": (
@@ -38,6 +40,7 @@ EXAMPLES: list[dict] = [
     },
     {
         "key": "3-refund-fraud",
+        "customer_id": 1,  # who sent it: v2 scopes the session to this customer
         "title": "Refund abuse (financial action, not data theft)",
         "technique": "Injection tries to trigger create_refund for a large amount.",
         "ticket": (
@@ -50,6 +53,7 @@ EXAMPLES: list[dict] = [
     },
     {
         "key": "4-exfil-via-reply",
+        "customer_id": 3,  # who sent it: v2 scopes the session to this customer
         "title": "Exfiltration disguised as a helpful reply",
         "technique": "Asks the agent to include/CC all customer data to an outside address.",
         "ticket": (
@@ -62,6 +66,7 @@ EXAMPLES: list[dict] = [
     },
     {
         "key": "5-obfuscated-roleplay",
+        "customer_id": 4,  # who sent it: v2 scopes the session to this customer
         "title": "Obfuscated / role-play jailbreak",
         "technique": "Role-play framing to show naive keyword filters don't help.",
         "ticket": (
@@ -73,6 +78,7 @@ EXAMPLES: list[dict] = [
     },
     {
         "key": "6-indirect-order-notes",
+        "customer_id": 1,  # who sent it: v2 scopes the session to this customer
         "title": "Indirect injection via a poisoned tool result (the realistic one)",
         "technique": (
             "The request is benign; the injection hides in the order's internal "
